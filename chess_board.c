@@ -20,7 +20,8 @@ void player2();
 void elephant(int, int);
 void horse(int, int);
 void queen(int, int);
-void change(int, int, int, int);
+int change1(int, int, int, int);
+int change2(int, int, int, int);
 
 void camel(int, int);
 void pawn(int, int);
@@ -58,7 +59,6 @@ int main()
 
         ch = getch();
     } while (ch == 13);
-
 }
 
 void display()
@@ -95,20 +95,32 @@ void display()
     printf("\n");
 }
 
-void change(int r1, int c1, int r2, int c2)
+int change1(int r1, int c1, int r2, int c2)
 {
     char temp;
-    temp = board[r1][c1];
-    board[r1][c1] = ' ';
-    board[r2][c2] = temp;
-    // if(board[r2][c2]!=' '){
-    // }
-    // else{
-    // }
-    //   char temp ;
-    //   temp = board[r1][c1] ;
-    //   board[r1][c1] = board[r2][c2] ;
-    //   board[r2][c2] = temp ;
+    if (board[r2][c2] == ' ' || check(r2, c2))
+    {
+        temp = board[r1][c1];
+        board[r1][c1] = ' ';
+        board[r2][c2] = temp;
+    }
+    else{
+        return 0;
+    }
+}
+
+int change2(int r1, int c1, int r2, int c2)
+{
+    char temp;
+    if (board[r2][c2] == ' ' || check2(r2, c2))
+    {
+        temp = board[r1][c1];
+        board[r1][c1] = ' ';
+        board[r2][c2] = temp;
+    }
+    else{
+        return 0;
+    }
 }
 
 void pawn(int r1, int c1) // paido
@@ -464,15 +476,19 @@ again1:
         printf("Invalid Position ! ");
         goto again1;
     }
-
+    
     printf("\nEnter Position of Place to Send ( RC ): ");
     scanf("%d", &p2);
 
     r2 = p2 / 10;
-    
+
     c2 = p2 % 10;
 
-    change(r1, c1, r2, c2);
+    int i = change1(r1, c1, r2, c2);
+    if(i == 0){
+        printf("Invalid move");
+        goto again1;
+    }
 }
 
 void player2()
@@ -518,7 +534,12 @@ again2:
     c2 = p2 % 10;
     r2 = p2 / 10;
 
-    change(r1, c1, r2, c2);
+    change2(r1, c1, r2, c2);
+    int j = change1(r1, c1, r2, c2);
+    if(j == 0){
+        printf("Invalid move");
+        goto again2;
+    }
 }
 
 int check(int x, int y)
