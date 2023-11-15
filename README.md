@@ -3,7 +3,8 @@
 Chess Game in C
 
 Description:
-This is a simple console-based Chess game implemented in C. The game features a basic two-player mode with a command-line interface.
+This is a simple console-based Chess game implemented in C.
+The game features a basic two-player mode with a command-line interface.
 
 Features:
 1.Chessboard display
