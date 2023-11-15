@@ -17,16 +17,16 @@ void display();
 void player1();
 void player2();
 
-void elephant(int, int);
-void horse(int, int);
-void queen(int, int);
+int elephant(int, int);
+int horse(int, int);
+int queen(int, int);
 int change1(int, int, int, int);
 int change2(int, int, int, int);
 
-void camel(int, int);
-void pawn(int, int);
-void pawnb(int, int);
-void king(int, int);
+int camel(int, int);
+int pawn(int, int);
+int pawnb(int, int);
+int king(int, int);
 
 int check(int, int);
 int check2(int, int);
@@ -95,64 +95,168 @@ void display()
     printf("\n");
 }
 
-int change1(int r1, int c1, int r2, int c2)
+void player1()
 {
-    char temp;
-    if (board[r2][c2] == ' ' || check(r2, c2))
+    int p1, p2, c1, r1, c2, r2, invalid;
+    // 13
+    printf("\nPLAYER 1 - Big Case\n");
+again1:
+    printf("\nEnter Position of Element to change ( RC ): ");
+    scanf("%d", &p1);
+
+    r1 = p1 / 10;
+    c1 = p1 % 10;
+
+    switch (board[r1][c1])
     {
-        temp = board[r1][c1];
-        board[r1][c1] = ' ';
-        board[r2][c2] = temp;
+    case 'P':
+        invalid = pawn(r1, c1);
+        break;
+    case 'R':
+        invalid = elephant(r1, c1);
+        if (invalid == 0)
+        {
+            printf("\nInvalid Move\n");
+            goto again1;
+        }
+        break;
+    case 'H':
+        invalid = horse(r1, c1);
+        if (invalid == 0)
+        {
+            printf("\nInvalid Move\n");
+            goto again1;
+        }
+        break;
+    case 'C':
+        invalid = camel(r1, c1);
+        if (invalid == 0)
+        {
+            printf("\nInvalid Move\n");
+            goto again1;
+        }
+        break;
+    case 'K':
+        invalid = king(r1, c1);
+        if (invalid == 0)
+        {
+            printf("\nInvalid Move\n");
+            goto again1;
+        }
+        break;
+    case 'Q':
+        invalid = queen(r1, c1);
+        if (invalid == 0)
+        {
+            printf("\nInvalid Move\n");
+            goto again1;
+        }
+        break;
+    default:
+        printf("Invalid Position ! ");
+        goto again1;
     }
-    else{
-        return 0;
+
+    printf("\nEnter Position of Place to Send ( RC ): ");
+    scanf("%d", &p2);
+
+    r2 = p2 / 10;
+
+    c2 = p2 % 10;
+
+    int i = change1(r1, c1, r2, c2);
+    if (i == 0)
+    {
+        printf("Invalid move");
+        goto again1;
     }
 }
 
-int change2(int r1, int c1, int r2, int c2)
+void player2()
 {
-    char temp;
-    if (board[r2][c2] == ' ' || check2(r2, c2))
+    int p1, p2, c1, r1, c2, r2, invalid;
+
+    printf("\nPLAYER 2 - Small Case \n");
+again2:
+    printf("\nEnter Position of Element to change ( RC ): ");
+    scanf("%d", &p1);
+
+    c1 = p1 % 10;
+    r1 = p1 / 10;
+
+    switch (board[r1][c1])
     {
-        temp = board[r1][c1];
-        board[r1][c1] = ' ';
-        board[r2][c2] = temp;
+    case 'p':
+        invalid = pawnb(r1, c1);
+        if (invalid == 0)
+        {
+            printf("\nInvalid Move\n");
+            goto again2;
+        }
+        break;
+    case 'r':
+        invalid = elephant(r1, c1);
+        if (invalid == 0)
+        {
+            printf("\nInvalid Move\n");
+            goto again2;
+        }
+        break;
+    case 'h':
+        invalid = horse(r1, c1);
+        if (invalid == 0)
+        {
+            printf("\nInvalid Move\n");
+            goto again2;
+        }
+        break;
+    case 'c':
+        invalid = camel(r1, c1);
+        if (invalid == 0)
+        {
+            printf("\nInvalid Move\n");
+            goto again2;
+        }
+        break;
+    case 'k':
+        invalid = king(r1, c1);
+        if (invalid == 0)
+        {
+            printf("\nInvalid Move\n");
+            goto again2;
+        }
+        break;
+    case 'q':
+        invalid = queen(r1, c1);
+        if (invalid == 0)
+        {
+            printf("\nInvalid Move\n");
+            goto again2;
+        }
+        break;
+    default:
+        printf("Invalid Position ! ");
+        goto again2;
     }
-    else{
-        return 0;
+
+    printf("\nEnter Position of Place to Send ( RC ): ");
+    scanf("%d", &p2);
+
+    c2 = p2 % 10;
+    r2 = p2 / 10;
+
+    int j = change2(r1, c1, r2, c2);
+    if (j == 0)
+    {
+        printf("Invalid move");
+        goto again2;
     }
 }
 
-void pawn(int r1, int c1) // paido
-{
-    pwstatus[c1]++;
-
-    printf("Available are: \n");
-
-    if (pwstatus[c1] == 1)
-    {
-        if (board[r1 + 1][c1] == ' ')
-            printf("%d%d , ", r1 + 1, c1);
-
-        if (board[r1 + 2][c1] == ' ')
-            printf("%d%d , ", r1 + 2, c1);
-    }
-    else
-    {
-        if (board[r1 + 1][c1] == ' ')
-            printf("%d%d , ", r1 + 1, c1);
-
-        if (check(r1 + 1, c1 + 1) == 1)
-            printf("%d%d* , ", r1 + 1, c1 + 1);
-
-        if (check(r1 + 1, c1 - 1) == 1)
-            printf("%d%d* , ", r1 + 1, c1 - 1);
-    }
-}
-
-void elephant(int r1, int c1)
+int elephant(int r1, int c1)
 {
     int i, j, n;
+    int k = 0, l = 0, pk;
 
     printf("Available are: \n");
 
@@ -166,6 +270,7 @@ void elephant(int r1, int c1)
         {
             break;
         }
+        k++;
         printf("%d%d , ", r1, n - 1);
         n--;
     }
@@ -174,7 +279,7 @@ void elephant(int r1, int c1)
 
     while (board[r1][n + 1] == ' ' && (n + 1) <= 7)
     {
-
+        k++;
         printf("%d%d , ", r1, n + 1);
         ++n;
     }
@@ -185,6 +290,7 @@ void elephant(int r1, int c1)
 
     while (board[n - 1][c1] == ' ' && n > -1)
     {
+        l++;
         printf("%d%d , ", n - 1, c1);
         --n;
     }
@@ -193,134 +299,99 @@ void elephant(int r1, int c1)
 
     while ((board[n + 1][c1] == ' ') && ((n) <= 7))
     {
+        l++;
         printf("%d%d , ", n + 1, c1);
         ++n;
     }
+    if (k == 0 && l == 0)
+    {
+
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
 }
 
-void horse(int r1, int c1)
+int horse(int r1, int c1)
 {
+    int i = 0;
     printf("Available are: ");
 
-    if (board[r1 + 2][c1 + 1] == ' ')
-        printf("%d%d, ", r1 + 2, c1 + 1);
-    if (board[r1 + 2][c1 - 1] == ' ')
+    if (board[r1 + 2][c1 + 1] == ' ' || check(r1 + 2, c1 + 1))
     {
-        if ((c1 - 1) > -1)
-            printf("%d%d, ", r1 + 2, c1 - 1);
+        i++;
+        printf("%d%d, ", r1 + 2, c1 + 1);
     }
 
-    if (board[r1 + 1][c1 + 2] == ' ')
+    if (board[r1 + 2][c1 - 1] == ' ' || check(r1 + 2, c1 - 1))
+    {
+        if ((c1 - 1) > -1)
+        {
+            i++;
+            printf("%d%d, ", r1 + 2, c1 - 1);
+        }
+    }
+
+    if (board[r1 + 1][c1 + 2] == ' ' || check(r1 + 1, c1 + 2))
     {
         if ((c1 + 2) != 8)
+        {
+            i++;
             printf("%d%d, ", r1 + 1, c1 + 2);
+        }
     }
-    if (board[r1 - 1][c1 + 2] == ' ')
+
+    if (board[r1 - 1][c1 + 2] == ' ' || check(r1 - 1, c1 + 2))
     {
+        i++;
         printf("%d%d, ", r1 - 1, c1 + 2);
     }
 
-    if (board[r1 - 2][c1 - 1] == ' ')
+    if (board[r1 - 2][c1 - 1] == ' ' || check(r1 - 2, c1 - 1))
     {
         if ((c1 - 1) != -1)
+        {
+            i++;
             printf("%d%d, ", r1 - 2, c1 - 1);
+        }
     }
 
-    if (board[r1 - 2][c1 + 1] == ' ')
+    if (board[r1 - 2][c1 + 1] == ' ' || check(r1 - 2, c1 + 1))
+    {
+        i++;
         printf("%d%d, ", r1 - 2, c1 + 1);
+    }
 
-    if (board[r1 + 1][c1 - 2] == ' ')
+    if (board[r1 + 1][c1 - 2] == ' ' || check(r1 + 1, c1 - 2))
+    {
+        i++;
         printf("%d%d, ", r1 + 1, c1 - 2);
+    }
 
-    if (board[r1 - 1][c1 - 2] == ' ')
+    if (board[r1 - 1][c1 - 2] == ' ' || check(r1 - 1, c1 - 2))
     {
         if ((c1 - 2) != -1)
+        {
+            i++;
             printf("%d%d, ", r1 - 1, c1 - 2);
+        }
+    }
+
+    if (i == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
     }
 }
 
-void camel(int r1, int c1)
+int queen(int r1, int c1)
 {
-    int a, b, c, d;
-    printf("Available are: \n");
-
-    a = 1, b = 1;
-
-    while (board[r1 - a][c1 + b] == ' ')
-    {
-        if ((r1 - a) == -1 || (c1 + b) == 8)
-            break;
-        printf("%d%d , ", r1 - a, c1 + b);
-        a++;
-        b++;
-    }
-
-    a = 1, b = 1;
-
-    while (board[r1 + a][c1 - b] == ' ')
-    {
-        if ((r1 + a) == 8 || (c1 - b) == -1)
-            break;
-        printf("%d%d , ", r1 + a, c1 - b);
-        a++;
-        b++;
-    }
-
-    a = 1, b = 1;
-
-    while (board[r1 + a][c1 + b] == ' ')
-    {
-        if ((r1 + a) == 8 || (c1 + b) == 8)
-            break;
-        printf("%d%d , ", r1 + a, c1 + b);
-        a++;
-        b++;
-    }
-
-    a = 1;
-    b = 1;
-
-    while (board[r1 - a][c1 - b] == ' ')
-    {
-        if ((r1 - a) == -1 || (c1 - b) == -1)
-            break;
-        printf("%d%d , ", r1 - a, c1 - b);
-        a++;
-        b++;
-    }
-}
-
-void king(int r1, int c1)
-{
-    printf("Available are: ");
-    if (board[r1][c1 + 1] == ' ')
-        printf("%d%d , ", r1, c1 + 1);
-
-    if (board[r1][c1 - 1] == ' ')
-        printf("%d%d , ", r1, c1 - 1);
-
-    if (board[r1 + 1][c1] == ' ')
-        printf("%d%d , ", r1 + 1, c1);
-
-    if (board[r1 - 1][c1] == ' ')
-        printf("%d%d , ", r1 - 1, c1);
-
-    if (board[r1 + 1][c1 + 1] == ' ')
-        printf("%d%d , ", r1 + 1, c1 + 1);
-
-    if (board[r1 - 1][c1 - 1] == ' ')
-        printf("%d%d , ", r1 - 1, c1 - 1);
-
-    if (board[r1 - 1][c1 + 1] == ' ')
-        printf("%d%d , ", r1 - 1, c1 + 1);
-
-    if (board[r1 + 1][c1 - 1] == ' ')
-        printf("%d%d , ", r1 + 1, c1 - 1);
-}
-
-void queen(int r1, int c1)
-{
-    int x = 1, y = 1, a, b;
+    int x = 1, y = 1, a, b, k = 0, l = 0, m = 0;
     printf("Available are: ");
 
     printf("Horizontal: ");
@@ -329,6 +400,7 @@ void queen(int r1, int c1)
     {
         if ((c1 - y) == -1)
             break;
+        k++;
         printf("%d%d , ", r1, c1 - y);
         y++;
     }
@@ -339,6 +411,7 @@ void queen(int r1, int c1)
     {
         if ((c1 + y) == 8)
             break;
+        k++;
         printf("%d%d , ", r1, c1 + y);
         y++;
     }
@@ -351,6 +424,7 @@ void queen(int r1, int c1)
     {
         if ((r1 - x) == -1)
             break;
+        l++;
         printf("%d%d , ", r1 - x, c1);
         x++;
     }
@@ -361,6 +435,7 @@ void queen(int r1, int c1)
     {
         if ((r1 + x) == 8)
             break;
+        l++;
         printf("%d%d , ", r1 + x, c1);
         x++;
     }
@@ -373,6 +448,7 @@ void queen(int r1, int c1)
     {
         if ((r1 - a) == -1 || (c1 + b) == 8)
             break;
+        m++;
         printf("%d%d , ", r1 - a, c1 + b);
         a++;
         b++;
@@ -384,6 +460,7 @@ void queen(int r1, int c1)
     {
         if ((r1 + a) == 8 || (c1 - b) == -1)
             break;
+        m++;
         printf("%d%d , ", r1 + a, c1 - b);
         a++;
         b++;
@@ -395,6 +472,7 @@ void queen(int r1, int c1)
     {
         if ((r1 + a) == 8 || (c1 + b) == 8)
             break;
+        m++;
         printf("%d%d , ", r1 + a, c1 + b);
         a++;
         b++;
@@ -407,14 +485,229 @@ void queen(int r1, int c1)
     {
         if ((r1 - a) == -1 || (c1 - b) == -1)
             break;
+        m++;
         printf("%d%d , ", r1 - a, c1 - b);
         a++;
         b++;
     }
+    if (k == 0 && l == 0 && m == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
 }
 
-void pawnb(int r1, int c1) // paido black
+int change1(int r1, int c1, int r2, int c2)
 {
+    char temp;
+    if (board[r2][c2] == ' ' || check(r2, c2))
+    {
+        temp = board[r1][c1];
+        board[r1][c1] = ' ';
+        board[r2][c2] = temp;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int change2(int r1, int c1, int r2, int c2)
+{
+    char temp;
+    if (board[r2][c2] == ' ' || check2(r2, c2))
+    {
+        temp = board[r1][c1];
+        board[r1][c1] = ' ';
+        board[r2][c2] = temp;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int camel(int r1, int c1)
+{
+    int a, b, c, d, k = 0;
+    printf("Available are: \n");
+
+    a = 1, b = 1;
+
+    while (board[r1 - a][c1 + b] == ' ')
+    {
+        if ((r1 - a) == -1 || (c1 + b) == 8)
+            break;
+        k++;
+        printf("%d%d , ", r1 - a, c1 + b);
+        a++;
+        b++;
+    }
+
+    a = 1, b = 1;
+
+    while (board[r1 + a][c1 - b] == ' ')
+    {
+        if ((r1 + a) == 8 || (c1 - b) == -1)
+            break;
+        k++;
+        printf("%d%d , ", r1 + a, c1 - b);
+        a++;
+        b++;
+    }
+
+    a = 1, b = 1;
+
+    while (board[r1 + a][c1 + b] == ' ')
+    {
+        if ((r1 + a) == 8 || (c1 + b) == 8)
+            break;
+        k++;
+        printf("%d%d , ", r1 + a, c1 + b);
+        a++;
+        b++;
+    }
+
+    a = 1;
+    b = 1;
+
+    while (board[r1 - a][c1 - b] == ' ')
+    {
+        if ((r1 - a) == -1 || (c1 - b) == -1)
+            break;
+        k++;
+        printf("%d%d , ", r1 - a, c1 - b);
+        a++;
+        b++;
+    }
+    if (k == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+int king(int r1, int c1)
+{
+    int k = 0;
+    printf("Available are: ");
+    if (board[r1][c1 + 1] == ' ')
+    {
+        k++;
+        printf("%d%d , ", r1, c1 + 1);
+    }
+
+    if (board[r1][c1 - 1] == ' ')
+    {
+        k++;
+        printf("%d%d , ", r1, c1 - 1);
+    }
+
+    if (board[r1 + 1][c1] == ' ')
+    {
+        k++;
+        printf("%d%d , ", r1 + 1, c1);
+    }
+
+    if (board[r1 - 1][c1] == ' ')
+    {
+        k++;
+        printf("%d%d , ", r1 - 1, c1);
+    }
+
+    if (board[r1 + 1][c1 + 1] == ' ')
+    {
+        k++;
+        printf("%d%d , ", r1 + 1, c1 + 1);
+    }
+
+    if (board[r1 - 1][c1 - 1] == ' ')
+    {
+        k++;
+        printf("%d%d , ", r1 - 1, c1 - 1);
+    }
+
+    if (board[r1 - 1][c1 + 1] == ' ')
+    {
+        k++;
+        printf("%d%d , ", r1 - 1, c1 + 1);
+    }
+
+    if (board[r1 + 1][c1 - 1] == ' ')
+    {
+        k++;
+        printf("%d%d , ", r1 + 1, c1 - 1);
+    }
+    if (k == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+int pawn(int r1, int c1)
+{
+    int k = 0;
+    pwstatus[c1]++;
+
+    printf("Available are: \n");
+
+    if (pwstatus[c1] == 1)
+    {
+        if (board[r1 + 1][c1] == ' ')
+        {
+            k++;
+            printf("%d%d , ", r1 + 1, c1);
+        }
+
+        if (board[r1 + 2][c1] == ' ')
+        {
+            k++;
+            printf("%d%d , ", r1 + 2, c1);
+        }
+    }
+    else
+    {
+        if (board[r1 + 1][c1] == ' ')
+        {
+            k++;
+            printf("%d%d , ", r1 + 1, c1);
+        }
+
+        if (check(r1 + 1, c1 + 1) == 1)
+        {
+            k++;
+            printf("%d%d* , ", r1 + 1, c1 + 1);
+        }
+
+        if (check(r1 + 1, c1 - 1) == 1)
+        {
+            k++;
+            printf("%d%d* , ", r1 + 1, c1 - 1);
+        }
+    }
+    if (k == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+int pawnb(int r1, int c1)
+{
+    int k = 0;
     pbstatus[c1]++;
 
     printf("Available are: \n");
@@ -422,123 +715,44 @@ void pawnb(int r1, int c1) // paido black
     if (pbstatus[c1] == 1)
     {
         if (board[r1 - 1][c1] == ' ')
+        {
+            k++;
             printf("%d%d , ", r1 - 1, c1);
+        }
 
         if (board[r1 - 2][c1] == ' ')
+        {
+            k++;
             printf("%d%d , ", r1 - 2, c1);
+        }
     }
     else
     {
         if (board[r1 - 1][c1] == ' ')
+        {
+            k++;
             printf("%d%d , ", r1 - 1, c1);
+        }
 
         if (check2(r1 - 1, c1 - 1) == 1)
+        {
+            k++;
             printf("%d%d* , ", r1 - 1, c1 - 1);
+        }
 
         if (check2(r1 - 1, c1 + 1) == 1)
+        {
+            k++;
             printf("%d%d* , ", r1 - 1, c1 + 1);
+        }
     }
-}
-
-void player1()
-{
-    int p1, p2, c1, r1, c2, r2;
-    // 13
-    printf("\nPLAYER 1 - Big Case\n");
-again1:
-    printf("\nEnter Position of Element to change ( RC ): ");
-    scanf("%d", &p1);
-
-    r1 = p1 / 10;
-    c1 = p1 % 10;
-
-    switch (board[r1][c1])
+    if (k == 0)
     {
-    case 'P':
-        pawn(r1, c1);
-        break;
-    case 'R':
-        elephant(r1, c1);
-        break;
-    case 'H':
-        horse(r1, c1);
-        break;
-    case 'C':
-        camel(r1, c1);
-        break;
-    case 'K':
-        king(r1, c1);
-        break;
-    case 'Q':
-        queen(r1, c1);
-        break;
-    default:
-        printf("Invalid Position ! ");
-        goto again1;
+        return 0;
     }
-    
-    printf("\nEnter Position of Place to Send ( RC ): ");
-    scanf("%d", &p2);
-
-    r2 = p2 / 10;
-
-    c2 = p2 % 10;
-
-    int i = change1(r1, c1, r2, c2);
-    if(i == 0){
-        printf("Invalid move");
-        goto again1;
-    }
-}
-
-void player2()
-{
-    int p1, p2, c1, r1, c2, r2;
-
-    printf("\nPLAYER 2 - Small Case \n");
-again2:
-    printf("\nEnter Position of Element to change ( RC ): ");
-    scanf("%d", &p1);
-
-    c1 = p1 % 10;
-    r1 = p1 / 10;
-
-    switch (board[r1][c1])
+    else
     {
-    case 'p':
-        pawnb(r1, c1);
-        break;
-    case 'r':
-        elephant(r1, c1);
-        break;
-    case 'h':
-        horse(r1, c1);
-        break;
-    case 'c':
-        camel(r1, c1);
-        break;
-    case 'k':
-        king(r1, c1);
-        break;
-    case 'q':
-        queen(r1, c1);
-        break;
-    default:
-        printf("Invalid Position ! ");
-        goto again2;
-    }
-
-    printf("\nEnter Position of Place to Send ( RC ): ");
-    scanf("%d", &p2);
-
-    c2 = p2 % 10;
-    r2 = p2 / 10;
-
-    change2(r1, c1, r2, c2);
-    int j = change1(r1, c1, r2, c2);
-    if(j == 0){
-        printf("Invalid move");
-        goto again2;
+        return 1;
     }
 }
 
